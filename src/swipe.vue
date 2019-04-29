@@ -222,7 +222,7 @@
             nextPage = pages[index + 1];
           }
 
-          if (this.continuous && pages.length > 1) {
+          if (this.continuous && pages.length > 1 && towards !== 'goto') {
             if (!prevPage) {
               prevPage = pages[pages.length - 1];
             }
