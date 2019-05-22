@@ -80,7 +80,10 @@
         pages: [],
         timer: null,
         reInitTimer: null,
-        noDrag: false
+        noDrag: false,
+        direction: 'x',
+        touchPoint: {},
+        actionStart: false
       };
     },
 
@@ -355,6 +358,9 @@
       },
 
       doOnTouchStart(event) {
+        this.touchPoint.x = event.targetTouches[0].pageX ;
+        this.touchPoint.y = event.targetTouches[0].pageY ;
+        this.actionStart = false;
         if (this.noDrag || this.disabled) return;
 
         var element = this.$el;
@@ -396,7 +402,15 @@
       },
 
       doOnTouchMove(event) {
-        if (this.noDrag || this.disabled) return;
+        if (!this.actionStart) {
+          const xDistance = Math.abs(this.touchPoint.x - event.targetTouches[0].pageX),
+              yDistance = Math.abs(this.touchPoint.y - event.targetTouches[0].pageY);
+          if (xDistance <= 10 && yDistance <= 10) return;
+          this.direction = xDistance > yDistance ? 'x' : 'y';
+          this.actionStart = true;
+        }
+        if (this.direction === 'x') event.stopPropagation();
+        if (this.noDrag || this.disabled || this.direction === 'y') return;
 
         var dragState = this.dragState;
         var touch = event.changedTouches ? event.changedTouches[0] : event;
