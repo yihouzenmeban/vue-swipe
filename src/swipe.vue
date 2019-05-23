@@ -358,8 +358,9 @@
       },
 
       doOnTouchStart(event) {
-        this.touchPoint.x = event.targetTouches[0].pageX ;
-        this.touchPoint.y = event.targetTouches[0].pageY ;
+        var touch = event.changedTouches ? event.changedTouches[0] : event;
+        this.touchPoint.x = touch.pageX ;
+        this.touchPoint.y = touch.pageY ;
         this.actionStart = false;
         if (this.noDrag || this.disabled) return;
 
@@ -402,9 +403,10 @@
       },
 
       doOnTouchMove(event) {
+        var touch = event.changedTouches ? event.changedTouches[0] : event;
         if (!this.actionStart) {
-          const xDistance = Math.abs(this.touchPoint.x - event.targetTouches[0].pageX),
-              yDistance = Math.abs(this.touchPoint.y - event.targetTouches[0].pageY);
+          const xDistance = Math.abs(this.touchPoint.x - touch.pageX),
+              yDistance = Math.abs(this.touchPoint.y - touch.pageY);
           if (xDistance <= 10 && yDistance <= 10) return event.stopPropagation();
           this.direction = xDistance > yDistance ? 'x' : 'y';
           this.actionStart = true;
@@ -413,7 +415,6 @@
         if (this.noDrag || this.disabled || this.direction === 'y') return;
 
         var dragState = this.dragState;
-        var touch = event.changedTouches ? event.changedTouches[0] : event;
 
         dragState.currentLeft = touch.pageX;
         dragState.currentTop = touch.pageY;
