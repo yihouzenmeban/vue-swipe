@@ -405,7 +405,7 @@
         if (!this.actionStart) {
           const xDistance = Math.abs(this.touchPoint.x - event.targetTouches[0].pageX),
               yDistance = Math.abs(this.touchPoint.y - event.targetTouches[0].pageY);
-          if (xDistance <= 10 && yDistance <= 10) return;
+          if (xDistance <= 10 && yDistance <= 10) return event.stopPropagation();
           this.direction = xDistance > yDistance ? 'x' : 'y';
           this.actionStart = true;
         }
